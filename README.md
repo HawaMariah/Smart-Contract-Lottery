@@ -8,3 +8,10 @@ This code is to create a Proveably Random smart contract lottery
 - the lottery should automatically and programatically draw a winner after a certain period 
 - chainlink vrf should  generate a provably random number 
 - chainlink automation should trigger the lottery draw regularly
+
+## Tests
+- wtite deploy scripts
+- write tests
+    local chain
+    forked testnet
+    forked mainnet
