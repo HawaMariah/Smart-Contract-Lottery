@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
 import {Raffle} from "src/Raffle.sol";
@@ -18,7 +18,7 @@ HelperConfig helperConfig = new HelperConfig();
 // sepolia - get sepolia config
 HelperConfig.NetworkConfig  memory config = helperConfig.getConfig();
 if (config.subscriptionId == 0){
-    
+
 }
 vm.startBroadcast();
 Raffle raffle = new Raffle(
