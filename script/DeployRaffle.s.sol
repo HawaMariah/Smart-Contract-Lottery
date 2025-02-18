@@ -4,6 +4,7 @@ pragma solidity ^0.8.18;
 import {Script} from "forge-std/Script.sol";
 import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
+import {CreateSubscription, FundSubscription, AddConsumer } from "script/Interaction.s.sol";
 
 contract DeployRaffle is Script {
     function run() public {}
@@ -14,7 +15,22 @@ contract DeployRaffle is Script {
         //local - deploy mocks, get local config
         // sepolia - get sepolia config
         HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
-        if (config.subscriptionId == 0) {}
+         //new subscription created    
+        if (config.subscriptionId == 0) {
+        
+            CreateSubscription createSubscription = new CreateSubscription();
+           (config.subscriptionId, config.vrfCoordinatorV2)= createSubscription.createSubscription(config.vrfCoordinatorV2);
+      
+      //fund subscription
+  FundSubscription fundSubscription = new FundSubscription();
+            fundSubscription.fundSubscription(
+                config.vrfCoordinatorV2, config.subscriptionId, config.link
+            );
+
+            helperConfig.setConfig(block.chainid, config);
+        }
+
+        
         vm.startBroadcast();
         Raffle raffle = new Raffle(
             config.entranceFee,
@@ -25,6 +41,10 @@ contract DeployRaffle is Script {
             config.callbackGasLimit
         );
         vm.stopBroadcast();
+                AddConsumer addConsumer = new AddConsumer();
+
+        addConsumer.addConsumer(address(raffle), config.vrfCoordinatorV2, config.subscriptionId);
+
         return (raffle, helperConfig);
     }
 }
