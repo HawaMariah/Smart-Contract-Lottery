@@ -11,6 +11,8 @@ import {LinkToken} from "test/mocks/LinkToken.sol";
 import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";
 
 contract CreateSubscription is Script, CodeConstants {
+        
+
     function createSubscriptionUsingConfig() public returns (uint256, address) {
         HelperConfig helperConfig = new HelperConfig();
         address vrfCoordinatorV2 = helperConfig.getConfig().vrfCoordinatorV2; // returns network config for active network
@@ -33,7 +35,7 @@ contract CreateSubscription is Script, CodeConstants {
     }
 }
 
-contract FundSubscription is Script {
+contract FundSubscription is Script, CodeConstants {
     uint256 public constant FUND_AMOUNT = 3 ether;
 
     function fundSubscriptiomUsingConfig() public {
@@ -55,7 +57,7 @@ contract FundSubscription is Script {
             vm.stopBroadcast();
         } else {
             vm.startBroadcast();
-            LinkToken(linkToken).transferAndCall(vrfCoordinatorV2, FUND_AMOUNT, abi.encode);
+            LinkToken(linkToken).transferAndCall(vrfCoordinatorV2, FUND_AMOUNT, abi.encode());
             vm.stopBroadcast();
         }
     }
@@ -80,7 +82,7 @@ contract AddConsumer is Script {
         uint256 subId = helperConfig.getConfig().subscriptionId;
         address vrfCoordinatorV2_5 = helperConfig.getConfig().vrfCoordinatorV2;
 
-        addConsumer(mostRecentlyDeployed, vrfCoordinatorV2_5, subId, account);
+        addConsumer(mostRecentlyDeployed, vrfCoordinatorV2_5, subId);
     }
 
     function run() external {
