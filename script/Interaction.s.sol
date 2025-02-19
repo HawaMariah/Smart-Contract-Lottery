@@ -14,7 +14,7 @@ contract CreateSubscription is Script, CodeConstants {
     function createSubscriptionUsingConfig() public returns (uint256, address) {
         HelperConfig helperConfig = new HelperConfig();
         address vrfCoordinator = helperConfig.getConfig().vrfCoordinator; // returns network config for active network
-       address account = helperConfig.getConfig().account; // returns account address
+        address account = helperConfig.getConfig().account; // returns account address
         (uint256 subId,) = createSubscription(vrfCoordinator, account);
         return (subId, vrfCoordinator);
     }
@@ -46,7 +46,9 @@ contract FundSubscription is Script, CodeConstants {
         fundSubscription(vrfCoordinator, subscriptionId, linkToken, account);
     }
 
-    function fundSubscription(address vrfCoordinator, uint256 subscriptionId, address linkToken, address account) public {
+    function fundSubscription(address vrfCoordinator, uint256 subscriptionId, address linkToken, address account)
+        public
+    {
         console.log(" funding subscription: ", subscriptionId);
         console.log("using vrfCoordinator:", vrfCoordinator);
         console.log("On chainId", block.chainid);
@@ -59,7 +61,7 @@ contract FundSubscription is Script, CodeConstants {
             vm.startBroadcast(account);
             LinkToken(linkToken).transferAndCall(vrfCoordinator, FUND_AMOUNT, abi.encode());
             vm.stopBroadcast();
-        } 
+        }
     }
 
     function run() public {
@@ -81,7 +83,7 @@ contract AddConsumer is Script {
         HelperConfig helperConfig = new HelperConfig();
         uint256 subId = helperConfig.getConfig().subscriptionId;
         address vrfCoordinatorV2_5 = helperConfig.getConfig().vrfCoordinator;
-address account = helperConfig.getConfig().account;
+        address account = helperConfig.getConfig().account;
         addConsumer(mostRecentlyDeployed, vrfCoordinatorV2_5, subId, account);
     }
 
